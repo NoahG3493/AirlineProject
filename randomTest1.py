@@ -8,4 +8,6 @@ def main():
     print(x)
     y = int(input("Enter another number:"))
     print(y)
+    z = int(input("Enter another number lol:"))
+    print(z)
 main()
