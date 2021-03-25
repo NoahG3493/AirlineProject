@@ -6,4 +6,6 @@ def main():
     # and it will print the number
     x = int(input("Enter a number: "))
     print(x)
+    y = int(input("Enter another number:"))
+    print(y)
 main()
