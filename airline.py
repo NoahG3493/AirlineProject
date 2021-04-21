@@ -3,65 +3,83 @@
 
 import tkinter as tk
 
-def chooseSeat():
-    pass
+def saveSeat():
+    b.configure(bg = 'red')
+    lst = []
+    lst.append(b)
 
-def createRows():
+def displayRows():
+    global b
+    new_win = tk.Tk()
+    new_win.geometry("500x500")
+    new_win.configure(bg = 'light blue')
     seat_counter = 1
-    for i in range(20):
-        for j in range(1, 7):
-            rowButton = tk.Button(win, text='Seat%d' % seat_counter, name='seat%d' % seat_counter)
-            rowButton.grid(row = i, column = j)
+    for x in range(20):
+        for y in range(1, 7):
+            # print('creating seat %d' % seat_counter)
+            b = tk.Button(
+                new_win, text='Seat%d' % seat_counter,
+                name='seat%d' % seat_counter, command = saveSeat
+            )
+            # doesn't matter that the columns won't line up
+            b.grid(row = x, column = y)
             seat_counter += 1
 
-def businessYes():
-    businessYesLbl = tk.Label(text = "You have chosen business select, please pick a seat in the first or second row")
-    businessYesLbl.pack()
-    createRows()
+def guestUser():
+    win.destroy()
+    guestUserWin = tk.Tk()
+    guestUserWin.geometry("500x500")
+    OptionList = ["Business Select", "Business (Regular)", "Family(1 Child)", "Family(2 Children)", "Family(3 Children)","Tourist",]
+    vr = tk.StringVar(guestUserWin)
+    vr.set(OptionList[0])
+    opt = tk.OptionMenu(guestUserWin, vr, *OptionList)
+    opt.config(width=90, font=('Helvetica', 12))
+    opt.pack(side="top")
+    confirm_btn = tk.Button(guestUserWin, text = "Confirm", command = displayRows)
+    confirm_btn.pack()
 
-def businessNo():
-    businessNoLbl = tk.Label(text = "You did not choose business select, chose a row between 3 and 20.")
-    businessNoLbl.pack()
+def admin():
+    global w1, w2, e, e1
+    win.destroy()
+    admin_win = tk.Tk()
+    admin_win.title("Admin Login")
+    admin_win.geometry("500x500")
+    admin_win.configure(bg='light blue')
+    w = tk.Label(admin_win, text="LiftServer(Sign-in)")
+    w.pack()
+    e1 = tk.Label(admin_win, text="******************************")
+    e1.pack()
+    w1 = tk.Label(admin_win, text="Username")
+    w1.pack()
+    e = tk.Entry(admin_win)
+    e.pack()
+    w2 = tk.Label(admin_win, text="Password")
+    w2.pack()
+    e1 = tk.Entry()
+    e1.pack()
+    loginButton = tk.Button(admin_win, text="Login", command= validateLogin)
+    loginButton.pack()
 
-def familywithOneChild():
-    pass
+def validateLogin():
+    global errorlbl
+    if e.get() == "Noah" and e1.get() == "Password":
+        displayRows()
+    else:
+        errorlbl = tk.Label(text = "Login error")
+        errorlbl.pack()
+        errorlbl.after(5000, deleteErrorLbl)
 
-def familywithTwoChildren():
-    pass
-
-def familywithThreeChildren():
-    pass
-
-def tourist():
-    pass
-
-
-def family():
-    familyLbl = tk.Label(text = "You have chosen family, how many children do you have?")
-    onechildbutton = tk.Button(win, text = "One", command = familywithOneChild)
-    twochildrenbutton = tk.Button(win, text = "Two", command = familywithTwoChildren)
-    threechildrenbutton = tk.Button(win, text = "Three", command = familywithThreeChildren)
-    familyLbl.pack()
-    onechildbutton.pack()
-    twochildrenbutton.pack()
-    threechildrenbutton.pack()
-
-def business():
-    lbl = tk.Label(text = "You have chosen business, do you want to be seated in business select?")
-    button4 = tk.Button(win, text = "Yes", command = businessYes)
-    button5 = tk.Button(win, text = "No", command = businessNo)
-    lbl.pack()
-    button4.pack()
-    button5.pack()
-
+def deleteErrorLbl():
+    errorlbl.destroy()
 
 win = tk.Tk()
 win.geometry("500x500")
 win.configure(bg = 'light blue')
-button = tk.Button(win, text = "Tourist", command = tourist )
-button2 = tk.Button(win, text = "Family", command = family)
-button3 = tk.Button(win, text = "Business", command = business)
-button.pack()
-button2.pack()
-button3.pack()
+introLbl = tk.Label(text = "Are you an administrator or a guest user?")
+adminButton = tk.Button(win, text = "Admin", command = admin)
+guestUserButton = tk.Button(win, text = "Guest User", command = guestUser)
+introLbl.pack()
+adminButton.place(x = 150, y = 100)
+guestUserButton.place(x = 275, y = 100)
 win.mainloop()
+
